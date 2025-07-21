@@ -19,6 +19,9 @@ export const EventForm: React.FC<EventFormProps> = ({
   onCancel,
   onDelete
 }) => {
+  console.log('EventForm 渲染中，selectedDate:', selectedDate, 'event:', event);
+  
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [formData, setFormData] = useState({
     title: event?.title || '',
     description: event?.description || '',
@@ -46,6 +49,8 @@ export const EventForm: React.FC<EventFormProps> = ({
       color: selectedCategory.color
     };
 
+    console.log('EventForm 提交事件:', eventData);
+    console.log('事件日期:', eventData.date);
     onSave(eventData);
   };
 
@@ -56,181 +61,303 @@ export const EventForm: React.FC<EventFormProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white/95 backdrop-blur-lg rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-sm sm:max-w-lg mx-4 border border-white/20 overflow-hidden max-h-[90vh] overflow-y-auto">
-        <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-4 sm:p-6">
-          <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center">
-            {event ? '✏️ 編輯事件' : '✨ 新增事件'}
-          </h2>
-          <p className="text-purple-100 mt-1 text-sm sm:text-base">
-            {event ? '修改您的行程安排' : '新增一個重要事件'}
-          </p>
-        </div>
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.6)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 9999
+    }}>
+      <div style={{
+        backgroundColor: 'white',
+        padding: '2rem',
+        borderRadius: '1rem',
+        maxWidth: '500px',
+        width: '90%',
+        maxHeight: '80vh',
+        overflowY: 'auto',
+        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+      }}>
+        <h2 style={{ 
+          marginBottom: '1.5rem', 
+          color: 'black', 
+          fontSize: '1.75rem', 
+          fontWeight: 'bold',
+          textAlign: 'center'
+        }}>
+          {event ? '✏️ 編輯事件' : '✨ 新增事件'}
+        </h2>
         
-        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 sm:space-y-6">
-          <div>
-            <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
-              <span className="text-lg mr-2">📝</span>
-              事件標題 *
+        <form onSubmit={handleSubmit}>
+          {/* 基本資料 - 總是顯示 */}
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: '0.5rem', 
+              color: 'black', 
+              fontWeight: 'bold',
+              fontSize: '1rem'
+            }}>
+              📝 事件標題 *
             </label>
             <input
               type="text"
               value={formData.title}
               onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-              className="w-full p-3 sm:p-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-gray-50 hover:bg-white text-gray-900"
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                border: '2px solid #d1d5db',
+                borderRadius: '0.5rem',
+                fontSize: '16px',
+                boxSizing: 'border-box'
+              }}
               placeholder="輸入事件標題..."
               autoFocus
-              style={{
-                fontSize: '16px',
-                appearance: 'none',
-                WebkitAppearance: 'none',
-                MozAppearance: 'none'
-              }}
             />
           </div>
 
-          <div>
-            <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
-              <span className="text-lg mr-2">📝</span>
-              描述
-            </label>
-            <textarea
-              value={formData.description}
-              onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-              className="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-gray-50 hover:bg-white text-gray-900 resize-none"
-              rows={3}
-              placeholder="輸入事件描述（選填）..."
-              style={{
-                fontSize: '16px',
-                appearance: 'none',
-                WebkitAppearance: 'none',
-                MozAppearance: 'none'
-              }}
-            />
-          </div>
-
-          <div>
-            <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
-              <span className="text-lg mr-2">📅</span>
-              日期 *
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: '0.5rem', 
+              color: 'black', 
+              fontWeight: 'bold',
+              fontSize: '1rem'
+            }}>
+              📅 日期 *
             </label>
             <input
               type="date"
               value={formData.date}
               onChange={(e) => setFormData(prev => ({ ...prev, date: e.target.value }))}
-              className="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-gray-50 hover:bg-white text-gray-900"
               style={{
+                width: '100%',
+                padding: '0.75rem',
+                border: '2px solid #d1d5db',
+                borderRadius: '0.5rem',
                 fontSize: '16px',
-                appearance: 'none',
-                WebkitAppearance: 'none',
-                MozAppearance: 'none'
+                boxSizing: 'border-box'
               }}
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                <span className="text-lg mr-2">⏰</span>
-                開始時間
-              </label>
-              <input
-                type="time"
-                value={formData.startTime}
-                onChange={(e) => setFormData(prev => ({ ...prev, startTime: e.target.value }))}
-                className="w-full p-3 sm:p-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-gray-50 hover:bg-white text-gray-900"
-                style={{
-                  fontSize: '16px',
-                  appearance: 'none',
-                  WebkitAppearance: 'none',
-                  MozAppearance: 'none'
-                }}
-              />
-            </div>
-            <div>
-              <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                <span className="text-lg mr-2">⏱️</span>
-                結束時間
-              </label>
-              <input
-                type="time"
-                value={formData.endTime}
-                onChange={(e) => setFormData(prev => ({ ...prev, endTime: e.target.value }))}
-                className="w-full p-3 sm:p-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-gray-50 hover:bg-white text-gray-900"
-                style={{
-                  fontSize: '16px',
-                  appearance: 'none',
-                  WebkitAppearance: 'none',
-                  MozAppearance: 'none'
-                }}
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
-              <span className="text-lg mr-2">🏷️</span>
-              分類
-            </label>
-            <div className="relative">
-              <select
-                value={formData.categoryId}
-                onChange={(e) => setFormData(prev => ({ ...prev, categoryId: e.target.value }))}
-                className="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 bg-gray-50 hover:bg-white text-gray-900 appearance-none cursor-pointer"
-                style={{
-                  fontSize: '16px',
-                  appearance: 'none',
-                  WebkitAppearance: 'none',
-                  MozAppearance: 'none'
-                }}
-              >
-                {DEFAULT_CATEGORIES.map(category => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-              <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">
-                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-            </div>
-            <div className="mt-2 flex items-center">
-              <div 
-                className="w-4 h-4 rounded-full mr-2" 
-                style={{ backgroundColor: selectedCategory.color }}
-              ></div>
-              <span className="text-sm text-gray-600">{selectedCategory.name}</span>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row justify-between pt-4 sm:pt-6 border-t border-gray-100 mt-4 sm:mt-6 space-y-3 sm:space-y-0">
-            <div className="order-2 sm:order-1">
-              {event && onDelete && (
-                <button
-                  type="button"
-                  onClick={handleDelete}
-                  className="w-full sm:w-auto px-4 sm:px-6 py-3 text-sm font-semibold text-red-600 bg-red-50 border-2 border-red-200 rounded-xl hover:bg-red-100 hover:border-red-300 transition-all duration-300 transform hover:scale-105"
+          {/* 進階選項 - 條件顯示 */}
+          {showAdvanced && (
+            <>
+              <div style={{ marginBottom: '1.5rem' }}>
+                <label style={{ 
+                  display: 'block', 
+                  marginBottom: '0.5rem', 
+                  color: 'black', 
+                  fontWeight: 'bold',
+                  fontSize: '1rem'
+                }}>
+                  📝 描述
+                </label>
+                <textarea
+                  value={formData.description}
+                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                   style={{
-                    appearance: 'none',
-                    WebkitAppearance: 'none',
-                    MozAppearance: 'none'
+                    width: '100%',
+                    padding: '0.75rem',
+                    border: '2px solid #d1d5db',
+                    borderRadius: '0.5rem',
+                    fontSize: '16px',
+                    boxSizing: 'border-box',
+                    minHeight: '80px',
+                    resize: 'vertical'
+                  }}
+                  placeholder="輸入事件描述（選填）..."
+                />
+              </div>
+
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: '1fr 1fr', 
+                gap: '1rem',
+                marginBottom: '1.5rem'
+              }}>
+                <div>
+                  <label style={{ 
+                    display: 'block', 
+                    marginBottom: '0.5rem', 
+                    color: 'black', 
+                    fontWeight: 'bold',
+                    fontSize: '0.9rem'
+                  }}>
+                    ⏰ 開始時間
+                  </label>
+                  <input
+                    type="time"
+                    value={formData.startTime}
+                    onChange={(e) => setFormData(prev => ({ ...prev, startTime: e.target.value }))}
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      border: '2px solid #d1d5db',
+                      borderRadius: '0.5rem',
+                      fontSize: '16px',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                </div>
+                <div>
+                  <label style={{ 
+                    display: 'block', 
+                    marginBottom: '0.5rem', 
+                    color: 'black', 
+                    fontWeight: 'bold',
+                    fontSize: '0.9rem'
+                  }}>
+                    ⏰ 結束時間
+                  </label>
+                  <input
+                    type="time"
+                    value={formData.endTime}
+                    onChange={(e) => setFormData(prev => ({ ...prev, endTime: e.target.value }))}
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem',
+                      border: '2px solid #d1d5db',
+                      borderRadius: '0.5rem',
+                      fontSize: '16px',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div style={{ marginBottom: '1.5rem' }}>
+                <label style={{ 
+                  display: 'block', 
+                  marginBottom: '0.5rem', 
+                  color: 'black', 
+                  fontWeight: 'bold',
+                  fontSize: '1rem'
+                }}>
+                  🏷️ 分類
+                </label>
+                <select
+                  value={formData.categoryId}
+                  onChange={(e) => setFormData(prev => ({ ...prev, categoryId: e.target.value }))}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    border: '2px solid #d1d5db',
+                    borderRadius: '0.5rem',
+                    fontSize: '16px',
+                    boxSizing: 'border-box',
+                    backgroundColor: 'white'
                   }}
                 >
-                  🗑️ 刪除事件
-                </button>
-              )}
-            </div>
-            <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 order-1 sm:order-2">
+                  {DEFAULT_CATEGORIES.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  marginTop: '0.5rem' 
+                }}>
+                  <div style={{
+                    width: '16px',
+                    height: '16px',
+                    borderRadius: '50%',
+                    backgroundColor: selectedCategory.color,
+                    marginRight: '0.5rem'
+                  }}></div>
+                  <span style={{ fontSize: '0.9rem', color: '#6b7280' }}>
+                    {selectedCategory.name}
+                  </span>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* 展開/收合按鈕 */}
+          <div style={{ 
+            textAlign: 'center', 
+            marginBottom: '1.5rem',
+            paddingBottom: '1rem',
+            borderBottom: showAdvanced ? '1px solid #e5e7eb' : 'none'
+          }}>
+            <button
+              type="button"
+              onClick={() => setShowAdvanced(!showAdvanced)}
+              style={{
+                padding: '0.5rem 1rem',
+                backgroundColor: 'transparent',
+                color: '#3b82f6',
+                border: '1px solid #3b82f6',
+                borderRadius: '0.5rem',
+                cursor: 'pointer',
+                fontSize: '0.9rem',
+                fontWeight: 'bold',
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#3b82f6';
+                e.currentTarget.style.color = 'white';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.color = '#3b82f6';
+              }}
+            >
+              {showAdvanced ? '🔼 收合選項' : '🔽 更多選項'}
+            </button>
+          </div>
+
+          {/* 按鈕區 */}
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            {event && onDelete && showAdvanced && (
+              <button
+                type="button"
+                onClick={handleDelete}
+                style={{
+                  padding: '0.75rem 1rem',
+                  backgroundColor: '#ef4444',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '0.5rem',
+                  cursor: 'pointer',
+                  fontSize: '0.9rem',
+                  fontWeight: 'bold'
+                }}
+              >
+                🗑️ 刪除
+              </button>
+            )}
+            
+            <div style={{ 
+              display: 'flex', 
+              gap: '1rem',
+              marginLeft: 'auto'
+            }}>
               <button
                 type="button"
                 onClick={onCancel}
-                className="w-full sm:w-auto px-4 sm:px-6 py-3 text-sm font-semibold text-gray-600 bg-gray-100 border-2 border-gray-200 rounded-xl hover:bg-gray-200 hover:border-gray-300 transition-all duration-300 transform hover:scale-105"
                 style={{
-                  appearance: 'none',
-                  WebkitAppearance: 'none',
-                  MozAppearance: 'none'
+                  padding: '0.75rem 1.5rem',
+                  backgroundColor: '#6b7280',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '0.5rem',
+                  cursor: 'pointer',
+                  fontSize: '1rem',
+                  fontWeight: 'bold'
                 }}
               >
                 ❌ 取消
@@ -238,25 +365,18 @@ export const EventForm: React.FC<EventFormProps> = ({
               <button
                 type="submit"
                 disabled={!formData.title.trim()}
-                className="w-full sm:w-auto px-6 sm:px-8 py-3 text-sm font-bold text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 style={{
-                  background: !formData.title.trim() ? '#9ca3af' : 'linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%)',
-                  appearance: 'none',
-                  WebkitAppearance: 'none',
-                  MozAppearance: 'none'
-                }}
-                onMouseEnter={(e) => {
-                  if (formData.title.trim()) {
-                    e.currentTarget.style.background = 'linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (formData.title.trim()) {
-                    e.currentTarget.style.background = 'linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%)';
-                  }
+                  padding: '0.75rem 1.5rem',
+                  backgroundColor: formData.title.trim() ? '#3b82f6' : '#9ca3af',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '0.5rem',
+                  cursor: formData.title.trim() ? 'pointer' : 'not-allowed',
+                  fontSize: '1rem',
+                  fontWeight: 'bold'
                 }}
               >
-                {event ? '✅ 更新事件' : '✨ 新增事件'}
+                {event ? '✏️ 更新事件' : '✨ 建立事件'}
               </button>
             </div>
           </div>

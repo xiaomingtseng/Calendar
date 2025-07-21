@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { CalendarGrid } from './components/CalendarGrid';
 import { EventForm } from './components/EventForm';
+import { DayDetailView } from './components/DayDetailView';
 import { Sidebar } from './components/Sidebar';
 import { WeekView } from './components/WeekView';
 import { getWeekDays } from './utils/dateUtils';
@@ -14,6 +15,7 @@ function App() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [showEventForm, setShowEventForm] = useState(false);
+  const [showDayDetail, setShowDayDetail] = useState(false);
   const [currentView, setCurrentView] = useState<CalendarView>('month');
   const [currentDate, setCurrentDate] = useState(new Date());
   const [showSidebar, setShowSidebar] = useState(false);
@@ -41,13 +43,17 @@ function App() {
   };
 
   const handleDateClick = (date: Date) => {
+    console.log('點擊日期:', date);
     setSelectedDate(date);
-    setShowEventForm(true);
+    setShowDayDetail(true);
+    console.log('設置 showDayDetail 為 true，顯示該日期的行程');
   };
 
   const handleNewEventClick = () => {
+    console.log('點擊新增事件按鈕');
     setSelectedDate(new Date());
     setShowEventForm(true);
+    console.log('設置 showEventForm 為 true');
   };
 
   const handleEventEdit = (event: Event) => {
@@ -61,13 +67,19 @@ function App() {
   };
 
   const handleSaveEvent = (event: Event) => {
+    console.log('正在保存事件:', event);
+    console.log('目前事件數量:', events.length);
+    
     if (editingEvent) {
       // 更新現有事件
       const updatedEvents = events.map(e => e.id === event.id ? event : e);
+      console.log('更新事件後數量:', updatedEvents.length);
       saveEvents(updatedEvents);
     } else {
       // 新增事件
-      saveEvents([...events, event]);
+      const newEvents = [...events, event];
+      console.log('新增事件後數量:', newEvents.length);
+      saveEvents(newEvents);
     }
     
     setShowEventForm(false);
@@ -87,6 +99,24 @@ function App() {
     setShowEventForm(false);
     setEditingEvent(null);
     setSelectedDate(null);
+  };
+
+  const handleCloseDayDetail = () => {
+    setShowDayDetail(false);
+    setSelectedDate(null);
+  };
+
+  const handleNewEventFromDayDetail = () => {
+    setShowDayDetail(false);
+    setShowEventForm(true);
+    // selectedDate 保持不變，這樣新事件會預設在選定的日期
+  };
+
+  const handleEditEventFromDayDetail = (event: Event) => {
+    setShowDayDetail(false);
+    setEditingEvent(event);
+    setSelectedDate(event.date);
+    setShowEventForm(true);
   };
 
   return (
@@ -194,12 +224,25 @@ function App() {
         </div>
 
         {showEventForm && (
-          <EventForm
-            selectedDate={selectedDate || undefined}
-            event={editingEvent || undefined}
-            onSave={handleSaveEvent}
-            onCancel={handleCancelEvent}
-            onDelete={handleDeleteEvent}
+          <>
+            {console.log('正在渲染 EventForm，selectedDate:', selectedDate, 'editingEvent:', editingEvent)}
+            <EventForm
+              selectedDate={selectedDate || undefined}
+              event={editingEvent || undefined}
+              onSave={handleSaveEvent}
+              onCancel={handleCancelEvent}
+              onDelete={handleDeleteEvent}
+            />
+          </>
+        )}
+
+        {showDayDetail && selectedDate && (
+          <DayDetailView
+            selectedDate={selectedDate}
+            events={events}
+            onClose={handleCloseDayDetail}
+            onEditEvent={handleEditEventFromDayDetail}
+            onNewEvent={handleNewEventFromDayDetail}
           />
         )}
       </div>

@@ -22,6 +22,11 @@ export const CalendarDay: React.FC<CalendarDayProps> = ({
     formatDate(event.date, 'yyyy-MM-dd') === formatDate(date, 'yyyy-MM-dd')
   );
 
+  // 調試信息
+  if (dayEvents.length > 0) {
+    console.log(`${formatDate(date, 'yyyy-MM-dd')} 有 ${dayEvents.length} 個事件:`, dayEvents.map(e => e.title));
+  }
+
   return (
     <div
       className="min-h-[100px] sm:min-h-[120px] lg:min-h-[140px] p-1 sm:p-2 lg:p-3 border-2 cursor-pointer transition-all duration-300 hover:shadow-lg relative overflow-hidden"
