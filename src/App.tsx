@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { CalendarGrid } from './components/CalendarGrid';
 import { EventForm } from './components/EventForm';
 import { DayDetailView } from './components/DayDetailView';
+import { VoiceEventCreator } from './components/VoiceEventCreator';
 import { Sidebar } from './components/Sidebar';
 import { WeekView } from './components/WeekView';
 import { getWeekDays } from './utils/dateUtils';
@@ -16,6 +17,7 @@ function App() {
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [showEventForm, setShowEventForm] = useState(false);
   const [showDayDetail, setShowDayDetail] = useState(false);
+  const [showVoiceCreator, setShowVoiceCreator] = useState(false);
   const [currentView, setCurrentView] = useState<CalendarView>('month');
   const [currentDate, setCurrentDate] = useState(new Date());
   const [showSidebar, setShowSidebar] = useState(false);
@@ -54,6 +56,11 @@ function App() {
     setSelectedDate(new Date());
     setShowEventForm(true);
     console.log('設置 showEventForm 為 true');
+  };
+
+  const handleVoiceEventClick = () => {
+    console.log('點擊語音建立事件按鈕');
+    setShowVoiceCreator(true);
   };
 
   const handleEventEdit = (event: Event) => {
@@ -117,6 +124,17 @@ function App() {
     setEditingEvent(event);
     setSelectedDate(event.date);
     setShowEventForm(true);
+  };
+
+  const handleVoiceEventCreate = (event: Event) => {
+    console.log('語音建立事件:', event);
+    const newEvents = [...events, event];
+    saveEvents(newEvents);
+    setShowVoiceCreator(false);
+  };
+
+  const handleVoiceEventCancel = () => {
+    setShowVoiceCreator(false);
   };
 
   return (
@@ -195,6 +213,10 @@ function App() {
                       handleNewEventClick();
                       setShowSidebar(false);
                     }}
+                    onVoiceEventClick={() => {
+                      handleVoiceEventClick();
+                      setShowSidebar(false);
+                    }}
                   />
                 </div>
               </div>
@@ -243,6 +265,13 @@ function App() {
             onClose={handleCloseDayDetail}
             onEditEvent={handleEditEventFromDayDetail}
             onNewEvent={handleNewEventFromDayDetail}
+          />
+        )}
+
+        {showVoiceCreator && (
+          <VoiceEventCreator
+            onEventCreate={handleVoiceEventCreate}
+            onCancel={handleVoiceEventCancel}
           />
         )}
       </div>

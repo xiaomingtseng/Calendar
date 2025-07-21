@@ -6,13 +6,15 @@ interface SidebarProps {
   onViewChange: (view: CalendarView) => void;
   onTodayClick: () => void;
   onNewEventClick: () => void;
+  onVoiceEventClick: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   currentView,
   onViewChange,
   onTodayClick,
-  onNewEventClick
+  onNewEventClick,
+  onVoiceEventClick
 }) => {
   return (
     <div className="w-full">
@@ -85,7 +87,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
               MozAppearance: 'none'
             }}
           >
-            <span className="text-sm lg:text-base font-medium">新增事件</span>
+            <span className="text-sm lg:text-base font-medium">✍️ 新增事件</span>
+          </button>
+          
+          <button
+            onClick={onVoiceEventClick}
+            className="w-full flex items-center justify-center p-2 lg:p-3 rounded-xl bg-gradient-to-r from-green-500 to-teal-500 text-white hover:from-green-600 hover:to-teal-600 transition-all duration-200 transform hover:scale-105 shadow-md"
+            style={{
+              appearance: 'none',
+              WebkitAppearance: 'none',
+              MozAppearance: 'none'
+            }}
+          >
+            <span className="text-sm lg:text-base font-medium">🎤 語音建立</span>
           </button>
         </div>
       </div>
