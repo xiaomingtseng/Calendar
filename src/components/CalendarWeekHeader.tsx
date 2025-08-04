@@ -5,23 +5,27 @@ const WEEK_DAYS_SHORT = ['一', '二', '三', '四', '五', '六', '日'];
 
 export const CalendarWeekHeader: React.FC = () => {
   return (
-    <div className="grid grid-cols-7 mb-2 sm:mb-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg overflow-hidden shadow-sm">
+    <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-2 sm:mb-4 p-2 bg-white/70 backdrop-blur-sm rounded-xl border border-gray-200 shadow-sm">
       {WEEK_DAYS.map((day, index) => (
         <div
           key={day}
-          className="p-2 sm:p-4 text-xs sm:text-sm font-bold text-center relative"
-          style={{
-            background: index >= 5 ? 
-              'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)' : 
-              'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)',
-            color: index >= 5 ? '#dc2626' : '#0369a1',
-            borderRight: index < 6 ? '1px solid rgba(0,0,0,0.08)' : 'none'
-          }}
+          className={`
+            p-2 sm:p-3 text-xs sm:text-sm font-semibold text-center rounded-lg
+            transition-all duration-200
+            ${index === 6 
+              ? 'bg-red-50 text-red-600 border border-red-200' 
+              : index === 5
+                ? 'bg-blue-50 text-blue-600 border border-blue-200'
+                : 'bg-gray-50 text-gray-600 border border-gray-200'
+            }
+          `}
         >
-          <span className="relative z-10 block sm:hidden">{WEEK_DAYS_SHORT[index]}</span>
-          <span className="relative z-10 hidden sm:block">{day}</span>
+          <span className="block sm:hidden">{WEEK_DAYS_SHORT[index]}</span>
+          <span className="hidden sm:block">{day}</span>
           {index >= 5 && (
-            <div className="absolute top-1 right-1 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-red-400 rounded-full opacity-60"></div>
+            <div className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full mx-auto mt-1 opacity-70 ${
+              index === 6 ? 'bg-red-400' : 'bg-blue-400'
+            }`}></div>
           )}
         </div>
       ))}

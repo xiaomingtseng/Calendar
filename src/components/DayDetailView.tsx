@@ -88,7 +88,7 @@ export const DayDetailView: React.FC<DayDetailViewProps> = ({
               border: 'none',
               cursor: 'pointer',
               fontSize: '1.5rem',
-              color: '#6b7280',
+              color: '#374151',
               borderRadius: '50%',
               width: '40px',
               height: '40px',
@@ -97,10 +97,12 @@ export const DayDetailView: React.FC<DayDetailViewProps> = ({
               justifyContent: 'center'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#f3f4f6';
+              e.currentTarget.style.backgroundColor = '#e5e7eb';
+              e.currentTarget.style.color = '#1f2937';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.color = '#374151';
             }}
           >
             ✕

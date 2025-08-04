@@ -51,6 +51,35 @@
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
   }
+
+  /* 月曆導航按鈕專用樣式 */
+  .calendar-nav-btn {
+    background-color: white !important;
+    padding: 0 !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    border-radius: 0.75rem !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+  }
+  
+  .calendar-nav-btn svg {
+    display: block !important;
+    stroke-width: 3 !important;
+    pointer-events: none !important;
+  }
+
+  /* 年月選擇器按鈕專用樣式 */
+  .year-month-picker-btn {
+    border-radius: 0.75rem !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    padding: 0.75rem 1rem !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+  }
 }
 
 @keyframes fadeIn {

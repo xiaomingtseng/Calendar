@@ -18,8 +18,8 @@ export interface EventCategory {
 }
 
 export const DEFAULT_CATEGORIES: EventCategory[] = [
-  { id: 'work', name: '工作', color: '#3b82f6' },
-  { id: 'personal', name: '個人', color: '#10b981' },
-  { id: 'health', name: '健康', color: '#f59e0b' },
-  { id: 'social', name: '社交', color: '#ef4444' },
+  { id: 'work', name: '工作', color: '#1e40af' },      // 深藍色 - 更好的對比度
+  { id: 'personal', name: '個人', color: '#059669' },   // 深綠色 - 更好的對比度  
+  { id: 'health', name: '健康', color: '#d97706' },     // 深橙色 - 更好的對比度
+  { id: 'social', name: '社交', color: '#dc2626' },     // 深紅色 - 更好的對比度
 ];

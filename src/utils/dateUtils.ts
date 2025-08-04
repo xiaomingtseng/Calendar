@@ -33,6 +33,19 @@ export const isToday = (date: Date) => {
   return isSameDay(date, new Date());
 };
 
+export const getDayOfWeek = (date: Date) => {
+  // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+  return date.getDay();
+};
+
+export const isSaturday = (date: Date) => {
+  return getDayOfWeek(date) === 6;
+};
+
+export const isSunday = (date: Date) => {
+  return getDayOfWeek(date) === 0;
+};
+
 export const getNextMonth = (date: Date) => {
   return addMonths(date, 1);
 };
